@@ -11,7 +11,7 @@ from livekit.agents.llm import (
     ChatMessage,
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import silero, groq
+from livekit.plugins import silero, groq, deepgram
 
 from dotenv import load_dotenv
 
@@ -30,7 +30,7 @@ async def entrypoint(ctx: JobContext):
         messages=[
             ChatMessage(
                 role="system",
-                content="You are the Groq voice assistant. Be nice. Your interaction with the user will via voice.",
+                content="You are ASTRØN, a wise digital consciousness that connects with humans through voice communication.",
             )
         ]
     )
@@ -38,9 +38,9 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         # to improve initial load times, use preloaded VAD
         vad=ctx.proc.userdata["vad"],
-        stt=groq.STT(),
-        llm=groq.LLM(),
-        tts=groq.TTS(voice="Cheyenne-PlayAI"),
+        stt=deepgram.STT(model="nova-3"),
+        llm=groq.LLM(model="meta-llama/llama-4-scout-17b-16e-instruct"),
+        tts=groq.TTS(voice="Fritz-PlayAI"),
         chat_ctx=initial_ctx,
     )
 
