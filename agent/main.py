@@ -11,9 +11,10 @@ from livekit.agents.llm import (
     ChatMessage,
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import silero, groq, deepgram
+from livekit.plugins import silero, groq, deepgram, openai
 
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -39,7 +40,7 @@ async def entrypoint(ctx: JobContext):
         # to improve initial load times, use preloaded VAD
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(model="nova-3"),
-        llm=groq.LLM(model="meta-llama/llama-4-scout-17b-16e-instruct"),
+        llm=openai.LLM(base_url="https://api.together.xyz/v1", model="meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8", api_key=os.environ.get("TOGETHER_API_KEY")),
         tts=groq.TTS(voice="Fritz-PlayAI"),
         chat_ctx=initial_ctx,
     )
